@@ -33,7 +33,7 @@ router.post('/sign-in', async(req,res) => {
 	const user = await prisma.users.findUnique({where:{email}})
 	if(!user) return res.status(400).json({message:"없음"})
 	if(!await bcrypt.compare(password,user.password)) return res.status(400).json({message:"아님"})
-	res.cookie('authorization', 'Bearer '+jwt.sign({userId:user.userId},'Hold X to pay respects'))
+	req.session.userId = user.userId
 	res.status(200).json({mesasge:"로그인 완료"})
 })
 
